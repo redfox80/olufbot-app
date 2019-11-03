@@ -1,4 +1,4 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, ipcMain, Tray, Menu } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
@@ -13,10 +13,10 @@ function createWindow() {
 
   // Create the browser window.
   win = new BrowserWindow({
-    x: 0,
-    y: 0,
-    width: size.width,
-    height: size.height,
+    x: ((size.width / 2) - 300),
+    y: ((size.height / 2) - 400),
+    width: 600,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
     },
@@ -36,7 +36,7 @@ function createWindow() {
   }
 
   if (serve) {
-    win.webContents.openDevTools();
+    win.webContents.openDevTools({mode: 'detach'});
   }
 
   // Emitted when the window is closed.
@@ -77,3 +77,25 @@ try {
   // Catch Error
   // throw e;
 }
+
+let tray = null;
+
+app.on('ready', () => {
+  tray = new Tray(`${__dirname}/src/assets/favicon.ico`);
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Show', type: 'normal'},
+    { label: 'Quit', type: 'normal'}
+  ]);
+
+  tray.setToolTip('Olufbot App');
+  tray.setContextMenu(contextMenu);
+
+  tray.on('double-click', () => {
+    win.show();
+  });
+
+});
+
+ipcMain.on('hide', (event, arg) => {
+  win.hide();
+});
