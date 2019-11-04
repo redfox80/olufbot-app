@@ -47,6 +47,17 @@ function createWindow() {
     win = null;
   });
 
+  win.on('close', (e) => {
+    e.preventDefault();
+    console.log(e);
+    // win.hide();
+  });
+
+  win.on('minimize', (e) => {
+    e.preventDefault();
+    win.hide();
+  });
+
 }
 
 try {
@@ -83,8 +94,8 @@ let tray = null;
 app.on('ready', () => {
   tray = new Tray(`${__dirname}/src/assets/favicon.ico`);
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show', type: 'normal'},
-    { label: 'Quit', type: 'normal'}
+    { label: 'Show', type: 'normal', click: () => {win.show()}},
+    { label: 'Quit', type: 'normal', click: () => {app.quit();}},
   ]);
 
   tray.setToolTip('Olufbot App');
