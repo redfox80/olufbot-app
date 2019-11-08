@@ -1,8 +1,14 @@
 import { app, BrowserWindow, screen, ipcMain, Tray, Menu } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
+import { init as UserDataInit } from './append/userData';
+
+UserDataInit();
 
 let win, serve;
+const appp = {
+  isQuitting: false,
+};
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 
@@ -20,6 +26,8 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
     },
+    icon: `${__dirname}/src/assets/favicon.ico`,
+    title: 'Olufbot App',
   });
 
   if (serve) {
@@ -48,9 +56,10 @@ function createWindow() {
   });
 
   win.on('close', (e) => {
-    e.preventDefault();
-    console.log(e);
-    // win.hide();
+    if (!appp.isQuitting) {
+      e.preventDefault();
+      win.hide();
+    }
   });
 
   win.on('minimize', (e) => {
@@ -94,8 +103,11 @@ let tray = null;
 app.on('ready', () => {
   tray = new Tray(`${__dirname}/src/assets/favicon.ico`);
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Show', type: 'normal', click: () => {win.show()}},
-    { label: 'Quit', type: 'normal', click: () => {app.quit();}},
+    { label: 'Show', type: 'normal', click: () => { win.show(); }},
+    { label: 'Quit', type: 'normal', click: () => {
+      appp.isQuitting = true;
+      app.quit();
+    }},
   ]);
 
   tray.setToolTip('Olufbot App');

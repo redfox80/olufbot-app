@@ -17,4 +17,8 @@ export class HomeComponent implements OnInit {
     ipcRenderer.send('hide', {1: 'Yup'});
   }
 
+  getUserData() {
+    ipcRenderer.send('getUserData');
+  }
+
 }
