@@ -56,7 +56,7 @@ function createWindow() {
   });
 
   win.on('close', (e) => {
-    if (!appp.isQuitting) {
+    if(!appp.isQuitting) {
       e.preventDefault();
       win.hide();
     }
