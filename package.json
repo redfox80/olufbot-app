@@ -60,7 +60,7 @@
     "codelyzer": "5.2.0",
     "conventional-changelog-cli": "2.0.25",
     "core-js": "3.4.0",
-    "electron": "7.1.0",
+    "electron": "9.1.0",
     "electron-builder": "22.1.0",
     "electron-reload": "1.5.0",
     "jasmine-core": "3.5.0",
